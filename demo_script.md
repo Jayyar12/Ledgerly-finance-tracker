@@ -17,18 +17,19 @@
 
 ---
 
-## 1:00 - 2:00 | Database Structure & Relationships (ERD Focus)
-**Objective:** Explain the foundation of the application—the schema-first database design.
+## 1:00 - 2:30 | Database Design & Relationships
+"Let's dive into the logic behind the data. The system follows a highly normalized relational structure:
 
-* **Action:** Display a quick slide of the ERD (Entity Relationship Diagram) or explain the flow conceptually while showing the Dashboard.
-* **Talking Points:**
-    * "Our database follows a strict **Schema-First Design** implemented via Laravel Migrations using MySQL."
-    * "The core structure revolves around four main tables, with strong referential integrity:"
-        * **Users Table:** The root. `id` acts as the Primary Key (PK).
-        * **Categories Table:** Connects to Users. The `id` is the PK, and `user_id` is the Foreign Key (FK) referencing `users.id` with a cascade delete. This ensures categories are entirely private to the user.
-        * **Transactions Table:** The main ledger. Contains two Foreign Keys: `user_id` (FK) and `category_id` (FK). We restrict deletion of a category if transactions are attached to preserve financial history.
-        * **Budgets Table:** Also links to `user_id` and `category_id` to enforce spending limits per category.
-    * "Every table uses `unsignedBigInteger` for IDs, and indexes are explicitly placed on all Foreign Keys to ensure rapid querying, which is vital for calculating dashboard balances."
+- **User 1-to-Many Category**: Every user manages their own unique set of categories. This ensures complete personalization while maintaining data integrity across the platform.
+- **Category 1-to-Many Transaction**: Every financial entry is strictly linked to a specific category. This relationship is the backbone of our analytics, allowing us to aggregate spending patterns into the visual charts you see on the dashboard.
+- **Category 1-to-Many Budget**: Users can set spending limits per category. This allows the system to perform real-time 'Burn Rate' calculations by comparing transaction totals against the allocated budget.
+
+### The 'Data Isolation' Logic
+You might notice that every core table—Categories, Transactions, and Budgets—carries a **user_id** foreign key. This is a deliberate architectural choice for **Multi-Tenant Isolation**:
+
+1. **Ownership**: Every record is explicitly 'owned' by a specific user.
+2. **Security**: By filtering every query through the `user_id`, we ensure that even though all users share the same database, their financial secrets remain strictly isolated and invisible to others.
+3. **Scalability**: This design allows us to scale the system to thousands of users while maintaining a clean, performant relationship between a person and their money."
 
 ---
 
