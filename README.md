@@ -13,7 +13,9 @@
 - **Transaction Ledger**: Advanced filtering, search, and pagination for full control over your financial history.
 - **Modern UI/UX**:
     - **Soft UI Aesthetic**: A clean, premium emerald-and-slate theme.
+    - **Account Onboarding**: Mandatory 3-step setup (Currency, Balance, Categories) for a seamless first-time experience.
     - **Loading Skeletons**: Professional placeholder states for improved perceived performance.
+    - **Motion Design**: Smooth pagination transitions and layout stability fixes (scrollbar-gutter).
     - **Dark Mode Support**: Optimized for both light and dark viewing environments.
 
 ## 🛠️ Technical Stack

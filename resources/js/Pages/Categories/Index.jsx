@@ -8,6 +8,7 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import SecondaryButton from '@/Components/SecondaryButton';
 import ConfirmationModal from '@/Components/ConfirmationModal';
 import { Plus, Trash2, Edit2, Tag, Check } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const PRESET_COLORS = [
     '#10B981', // Emerald
@@ -19,7 +20,6 @@ const PRESET_COLORS = [
     '#6366F1', // Indigo
     '#64748B', // Slate
     '#EC4899', // Pink
-    '#14B8A6', // Teal
 ];
 
 export default function Index({ categories }) {
@@ -97,37 +97,46 @@ export default function Index({ categories }) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {categories.data.map((cat) => (
-                            <div key={cat.id} className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div 
-                                        className="p-3 rounded-xl"
-                                        style={{ backgroundColor: `${cat.color}20`, color: cat.color }}
-                                    >
-                                        <Tag className="w-5 h-5" />
+                    <AnimatePresence mode="wait">
+                        <motion.div 
+                            key={categories.current_page}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.3 }}
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 min-h-[400px]"
+                        >
+                            {categories.data.map((cat) => (
+                                <div key={cat.id} className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div 
+                                            className="p-3 rounded-xl"
+                                            style={{ backgroundColor: `${cat.color}20`, color: cat.color }}
+                                        >
+                                            <Tag className="w-5 h-5" />
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <button onClick={() => openEditModal(cat)} className="text-slate-400 hover:text-emerald-500 transition-colors">
+                                                <Edit2 className="w-4 h-4" />
+                                            </button>
+                                            <button onClick={() => confirmDeletion(cat)} className="text-slate-400 hover:text-rose-500 transition-colors">
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => openEditModal(cat)} className="text-slate-400 hover:text-emerald-500 transition-colors">
-                                            <Edit2 className="w-4 h-4" />
-                                        </button>
-                                        <button onClick={() => confirmDeletion(cat)} className="text-slate-400 hover:text-rose-500 transition-colors">
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
-                                    </div>
+                                    <h3 className="text-lg font-bold text-slate-800 dark:text-white">{cat.name}</h3>
+                                    <p className="text-xs font-medium text-slate-500 uppercase tracking-widest mt-1">
+                                        {cat.type}
+                                    </p>
                                 </div>
-                                <h3 className="text-lg font-bold text-slate-800 dark:text-white">{cat.name}</h3>
-                                <p className="text-xs font-medium text-slate-500 uppercase tracking-widest mt-1">
-                                    {cat.type}
-                                </p>
-                            </div>
-                        ))}
-                        {categories.data.length === 0 && (
-                            <div className="col-span-full py-12 text-center bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
-                                <p className="text-slate-500">No categories found. Create one to get started!</p>
-                            </div>
-                        )}
-                    </div>
+                            ))}
+                            {categories.data.length === 0 && (
+                                <div className="col-span-full py-12 text-center bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">
+                                    <p className="text-slate-500">No categories found. Create one to get started!</p>
+                                </div>
+                            )}
+                        </motion.div>
+                    </AnimatePresence>
 
                     {/* Pagination */}
                     {categories.links.length > 3 && (

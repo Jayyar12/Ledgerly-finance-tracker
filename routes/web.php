@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\OnboardingController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,6 +18,11 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/setup', [OnboardingController::class, 'index'])->name('setup.index');
+    Route::post('/setup', [OnboardingController::class, 'update'])->name('setup.update');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {

@@ -22,9 +22,11 @@ import {
 } from 'lucide-react';
 import Modal from '@/Components/Modal';
 import SecondaryButton from '@/Components/SecondaryButton';
+import { AnimatePresence } from 'framer-motion';
+import PageWrapper from '@/Components/PageWrapper';
 
 export default function AuthenticatedLayout({ children }) {
-    const { auth, flash, header } = usePage().props;
+    const { auth, flash, header, url } = usePage().props;
     const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
     const user = auth.user;
 
@@ -46,7 +48,7 @@ export default function AuthenticatedLayout({ children }) {
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex">
-            {/* Sidebar */}
+            {/* Sidebar remains stable */}
             <aside className="w-72 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col fixed h-full z-50 transition-all duration-300">
                 {/* Logo Section */}
                 <div className="p-8 flex items-center gap-3">
@@ -108,7 +110,6 @@ export default function AuthenticatedLayout({ children }) {
             {/* Help Modal */}
             <Modal show={isHelpModalOpen} onClose={() => setIsHelpModalOpen(false)} maxWidth="2xl">
                 <div className="p-8 bg-white dark:bg-slate-900 rounded-3xl overflow-hidden relative">
-                    {/* Decorative Background Icon */}
                     <div className="absolute -right-10 -top-10 text-emerald-500/5">
                         <Wallet size={200} />
                     </div>
@@ -132,7 +133,7 @@ export default function AuthenticatedLayout({ children }) {
                                         <h3 className="font-bold text-slate-800 dark:text-white">Transactions</h3>
                                     </div>
                                     <p className="text-xs text-slate-500 leading-relaxed">
-                                        Add every income and expense. Use the <strong>Searchable Select</strong> to quickly find categories. We recommend adding descriptions for better tracking.
+                                        Add every income and expense. Use the <strong>Searchable Select</strong> to quickly find categories.
                                     </p>
                                 </div>
                                 <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
@@ -141,7 +142,7 @@ export default function AuthenticatedLayout({ children }) {
                                         <h3 className="font-bold text-slate-800 dark:text-white">Categories</h3>
                                     </div>
                                     <p className="text-xs text-slate-500 leading-relaxed">
-                                        Organize your money. Assign colors to categories so your dashboard charts and budget bars are easy to distinguish at a glance.
+                                        Organize your money. Assign colors to categories for better visual tracking.
                                     </p>
                                 </div>
                             </div>
@@ -153,7 +154,7 @@ export default function AuthenticatedLayout({ children }) {
                                         <h3 className="font-bold text-slate-800 dark:text-white">Budgets</h3>
                                     </div>
                                     <p className="text-xs text-slate-500 leading-relaxed">
-                                        Set spending limits for expense categories. The dashboard will show you exactly how much "runway" you have left for the month.
+                                        Set spending limits for expense categories and track your runway.
                                     </p>
                                 </div>
                                 <div className="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl">
@@ -162,7 +163,7 @@ export default function AuthenticatedLayout({ children }) {
                                         <h3 className="font-bold text-slate-800 dark:text-white">Reports</h3>
                                     </div>
                                     <p className="text-xs text-slate-500 leading-relaxed">
-                                        Want to see your monthly progress? Use the <strong>Month Picker</strong> on the dashboard to export a professional PDF summary of your finances.
+                                        Export professional PDF summaries of your monthly finances.
                                     </p>
                                 </div>
                             </div>
@@ -186,32 +187,7 @@ export default function AuthenticatedLayout({ children }) {
                 {/* Global Top Header - Fixed and Persistent */}
                 <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200 dark:border-slate-800 w-full">
                     <div className="mx-auto max-w-7xl px-8 py-4 flex items-center justify-between min-h-[73px]">
-                        {/* Left: Page Specific Content Area */}
-                        <div id="page-header" className="flex-1 transition-opacity duration-300">
-                            {/* Header content will be injected via page-specific render */}
-                        </div>
-
-                        {/* Middle: Global Currency Switcher */}
-                        <div className="flex items-center gap-2 px-4 py-1.5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-700">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-2">Currency:</span>
-                            <div className="flex gap-1">
-                                {['USD', 'PHP'].map((curr) => (
-                                    <button
-                                        key={curr}
-                                        onClick={() => router.patch(route('profile.currency.update'), { currency: curr })}
-                                        className={`px-3 py-1 rounded-xl text-xs font-bold transition-all duration-200 ${
-                                            user.currency === curr 
-                                                ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
-                                                : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700'
-                                        }`}
-                                    >
-                                        {curr}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Right: User Profile (Stay Fixed at Top Right) */}
+                        <div id="page-header" className="flex-1" />
                         <div className="ml-6 pl-6 border-l border-slate-100 dark:border-slate-800">
                             <Dropdown>
                                 <Dropdown.Trigger>
@@ -239,9 +215,7 @@ export default function AuthenticatedLayout({ children }) {
                                         <Settings className="w-4 h-4 text-slate-400 group-hover/item:text-emerald-500 group-hover/item:rotate-45 transition-all" />
                                         <span className="font-medium text-slate-600 dark:text-slate-300 group-hover/item:text-slate-900 dark:group-hover/item:text-white">Profile Settings</span>
                                     </Dropdown.Link>
-
                                     <div className="border-t border-slate-50 dark:border-slate-700"></div>
-
                                     <Dropdown.Link
                                         href={route('logout')}
                                         method="post"
@@ -257,9 +231,13 @@ export default function AuthenticatedLayout({ children }) {
                     </div>
                 </header>
 
-                <main className="flex-1 p-8">
-                    <div className="mx-auto max-w-7xl">
-                        {children}
+                <main className="flex-1 p-8 overflow-x-hidden">
+                    <div className="mx-auto max-w-7xl min-h-[70vh]">
+                        <AnimatePresence mode="wait">
+                            <PageWrapper key={usePage().component}>
+                                {children}
+                            </PageWrapper>
+                        </AnimatePresence>
                     </div>
                 </main>
 

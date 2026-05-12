@@ -20,7 +20,7 @@ class CategoryController extends Controller
         return Inertia::render('Categories/Index', [
             'categories' => auth()->user()->categories()
                 ->latest()
-                ->paginate(10)
+                ->paginate(12)
         ]);
     }
 

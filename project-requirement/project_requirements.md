@@ -36,6 +36,8 @@ Stores user credentials and profile information.
 - `email` (string, unique)
 - `password` (string)
 - `currency` (enum: ['USD', 'PHP'], default: 'USD') - *User preferred currency*
+- `onboarded` (boolean, default: false) - *Tracks setup completion*
+- `initial_balance` (decimal: 15,2, default: 0) - *Starting funds from onboarding*
 - `remember_token` (string, nullable)
 - `timestamps`
 
@@ -79,6 +81,8 @@ Sets spending limits for categories.
 - **Form Validation**: Strict server-side validation using **Laravel Form Requests** for all data entry points (Transactions, Categories, Budgets).
 - **Policies**: Users can only view, edit, or delete their own transactions and categories.
 - **Currency Selection**: Global state management for currency (USD/PHP) persisting to the user profile.
+- **Account Onboarding**: Mandatory 3-step setup wizard for new users (Currency -> Initial Balance -> Category Selection).
+- **Onboarding Middleware**: Global `EnsureOnboardingIsCompleted` middleware that intercepts unonboarded users and redirects them to the `/setup` flow.
 
 ### 4.2 Category Management
 - **CRUD**: Users can create, update, and delete their own categories.
@@ -87,7 +91,7 @@ Sets spending limits for categories.
 ### 4.3 Transaction Management (Core CRUD)
 - **Create**: Form with amount, date, description, and a category dropdown filtered by the transaction type.
 - **Read & Search**: 
-    - **Pagination**: Results are paginated (10 per page) to ensure performance.
+    - **Pagination**: Results are paginated (12 per page) to ensure performance.
     - **Filtering**: Real-time filtering by Date Range, Category, and Transaction Type.
     - **Search**: Full-text search on transaction descriptions.
 - **Update**: Modal or page to edit existing entries.
@@ -159,6 +163,10 @@ Sets spending limits for categories.
     - `StatCardSkeleton`: Pulsing cards for summary stats.
     - `ChartSkeleton`: Structural outlines for analytics charts.
     - `TableSkeleton`: Placeholder rows for transaction and budget tables.
+- **Smooth Motion Design**: 
+    - **Pagination Transitions**: `AnimatePresence` used to provide fade/slide effects when switching pages.
+    - **Layout Stability**: `scrollbar-gutter: stable` and `overflow-y: scroll` enforced to prevent horizontal layout shifts.
+    - **Stable Containers**: `min-height` applied to tables and grids to prevent footer "jumping" during data switches.
 
 ---
 

@@ -1,30 +1,35 @@
 import React from 'react';
 
-export default function BudgetProgress({ category, spent, limit, percentage }) {
+export default function BudgetProgress({ category, spent, limit, percentage, currency = '$' }) {
     const isOver = spent > limit;
     const barColor = isOver ? 'bg-rose-500' : percentage > 80 ? 'bg-amber-500' : 'bg-emerald-500';
 
     return (
-        <div className="space-y-2">
+        <div className="space-y-3 group">
             <div className="flex justify-between items-end">
                 <div>
-                    <h4 className="font-semibold text-slate-800 dark:text-slate-200">{category}</h4>
-                    <p className="text-xs text-slate-500">
-                        ${spent.toLocaleString()} / ${limit.toLocaleString()}
+                    <h4 className="font-bold text-slate-800 dark:text-slate-100 group-hover:text-emerald-500 transition-colors">{category}</h4>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
+                        {currency}{spent.toLocaleString()} <span className="text-slate-300 dark:text-slate-600">/</span> {currency}{limit.toLocaleString()}
                     </p>
                 </div>
-                <span className={`text-xs font-bold ${isOver ? 'text-rose-500' : 'text-slate-500'}`}>
-                    {percentage}%
-                </span>
+                <div className="text-right">
+                    <span className={`text-sm font-black ${isOver ? 'text-rose-500' : 'text-slate-600 dark:text-slate-400'}`}>
+                        {percentage}%
+                    </span>
+                </div>
             </div>
-            <div className="h-2 w-full bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden">
+            <div className="h-2.5 w-full bg-slate-100 dark:bg-slate-900/50 rounded-full overflow-hidden p-0.5 border border-slate-200 dark:border-slate-700">
                 <div 
-                    className={`h-full ${barColor} transition-all duration-500`} 
+                    className={`h-full ${barColor} rounded-full transition-all duration-1000 ease-out shadow-sm`} 
                     style={{ width: `${Math.min(percentage, 100)}%` }}
                 />
             </div>
             {isOver && (
-                <p className="text-[10px] text-rose-500 font-medium">Over budget by ${(spent - limit).toLocaleString()}</p>
+                <div className="flex items-center gap-1.5 animate-pulse">
+                    <div className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                    <p className="text-[10px] text-rose-500 font-black uppercase tracking-tighter">Over budget by {currency}{(spent - limit).toLocaleString()}</p>
+                </div>
             )}
         </div>
     );

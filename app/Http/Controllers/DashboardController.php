@@ -26,7 +26,7 @@ class DashboardController extends Controller
             ->whereHas('category', fn($q) => $q->where('type', 'expense'))
             ->sum('amount');
         
-        $balance = $totalIncome - $totalExpense;
+        $balance = (float)$user->initial_balance + $totalIncome - $totalExpense;
 
         // 2. Monthly Stats
         $monthlyIncome = $user->transactions()

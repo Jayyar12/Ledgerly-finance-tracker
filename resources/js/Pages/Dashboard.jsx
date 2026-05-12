@@ -4,213 +4,248 @@ import { useState, useEffect } from 'react';
 import StatCard from '@/Components/StatCard';
 import BudgetProgress from '@/Components/BudgetProgress';
 import { TrendChart, DistributionChart } from '@/Components/DashboardCharts';
-import StatCardSkeleton from '@/Components/Skeletons/StatCardSkeleton';
-import ChartSkeleton from '@/Components/Skeletons/ChartSkeleton';
-import TableSkeleton from '@/Components/Skeletons/TableSkeleton';
+import { motion } from 'framer-motion';
 import { 
-    CreditCard, 
+    Wallet, 
     ArrowUpRight, 
     ArrowDownLeft, 
-    Wallet, 
-    Download, 
-    TrendingUp 
+    CreditCard, 
+    TrendingUp, 
+    Download 
 } from 'lucide-react';
 
 export default function Dashboard({ stats, recentTransactions, budgets, charts }) {
     const { auth } = usePage().props;
     const [reportMonth, setReportMonth] = useState(new Date().toISOString().slice(0, 7)); // YYYY-MM
-    const [loading, setLoading] = useState(true);
     const currencySymbol = auth.user.currency === 'PHP' ? '₱' : '$';
 
-    useEffect(() => {
-        // Simulate initial loading for skeletons
-        const timer = setTimeout(() => setLoading(false), 800);
-        return () => clearTimeout(timer);
-    }, []);
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return 'Good Morning';
+        if (hour < 18) return 'Good Afternoon';
+        return 'Good Evening';
+    };
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.2
+            }
+        }
+    };
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { 
+            opacity: 1, 
+            y: 0,
+            transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+        }
+    };
 
     return (
         <AuthenticatedLayout>
             <Head title="Dashboard" />
 
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <h2 className="text-2xl font-bold leading-tight text-slate-800 dark:text-slate-100">
-                    Financial Overview
-                </h2>
+            {/* Header / Welcome Section */}
+            <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.7 }}
+                className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-10 gap-6"
+            >
+                <div>
+                    <p className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-2">Personal Overview</p>
+                    <h2 className="text-4xl font-black leading-tight text-slate-800 dark:text-white tracking-tight">
+                        {getGreeting()}, <span className="text-emerald-500">{auth.user.name.split(' ')[0]}</span>
+                    </h2>
+                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">
+                        Here's what's happening with your finances today.
+                    </p>
+                </div>
                 
-                <div className="flex items-center gap-3 bg-white dark:bg-slate-800 p-2 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
-                    <div className="flex items-center gap-2 px-3 border-r border-slate-100 dark:border-slate-700">
-                        <span className="text-[10px] uppercase font-bold text-slate-400">Report Month:</span>
+                <div className="flex flex-wrap items-center gap-3 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md p-2 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="flex items-center gap-2 px-4 border-r border-slate-200 dark:border-slate-700">
+                        <span className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Report Month</span>
                         <input 
                             type="month" 
-                            className="border-none bg-transparent text-sm font-bold text-slate-700 dark:text-slate-200 focus:ring-0 p-0 cursor-pointer"
+                            className="border-none bg-transparent text-sm font-black text-slate-700 dark:text-slate-200 focus:ring-0 p-0 cursor-pointer"
                             value={reportMonth}
                             onChange={(e) => setReportMonth(e.target.value)}
                         />
                     </div>
                     <a 
                         href={route('reports.export', { month: reportMonth })} 
-                        className="inline-flex items-center px-4 py-2 bg-emerald-500 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-emerald-600 shadow-lg shadow-emerald-500/20 transition ease-in-out duration-150 gap-2"
+                        className="inline-flex items-center px-6 py-3 bg-slate-900 dark:bg-emerald-500 border border-transparent rounded-2xl font-black text-[10px] text-white uppercase tracking-[0.2em] hover:scale-105 active:scale-95 shadow-xl shadow-slate-500/20 dark:shadow-emerald-500/20 transition-all duration-300 gap-2"
                     >
-                        <Download className="w-4 h-4" /> Export Report
+                        <Download className="w-4 h-4" /> Export Data
                     </a>
                 </div>
-            </div>
+            </motion.div>
 
-            <div className="py-12">
-                <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
-                    {/* Top Stats */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        {loading ? (
-                            [...Array(4)].map((_, i) => <StatCardSkeleton key={i} />)
-                        ) : (
-                            <>
-                                <StatCard 
-                                    title="Total Balance" 
-                                    value={stats.balance} 
-                                    icon={<Wallet className="w-6 h-6" />}
-                                    type="neutral"
-                                    currency={currencySymbol}
-                                />
-                                <StatCard 
-                                    title="Monthly Income" 
-                                    value={stats.monthlyIncome} 
-                                    icon={<ArrowUpRight className="w-6 h-6" />}
-                                    type="positive"
-                                    currency={currencySymbol}
-                                />
-                                <StatCard 
-                                    title="Monthly Expenses" 
-                                    value={stats.monthlyExpense} 
-                                    icon={<ArrowDownLeft className="w-6 h-6" />}
-                                    type="negative"
-                                    currency={currencySymbol}
-                                />
-                                <StatCard 
-                                    title="Savings Rate" 
-                                    value={`${stats.savingsRate}%`} 
-                                    icon={<CreditCard className="w-6 h-6" />}
-                                    type={stats.savingsRate > 0 ? 'positive' : 'negative'}
-                                />
-                            </>
-                        )}
-                    </div>
+            <motion.div 
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="space-y-8 pb-12"
+            >
+                {/* Top Stats Grid */}
+                <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <StatCard 
+                        title="Total Balance" 
+                        value={stats.balance} 
+                        icon={<Wallet />}
+                        type="neutral"
+                        currency={currencySymbol}
+                    />
+                    <StatCard 
+                        title="Monthly Income" 
+                        value={stats.monthlyIncome} 
+                        icon={<ArrowUpRight />}
+                        type="positive"
+                        currency={currencySymbol}
+                    />
+                    <StatCard 
+                        title="Monthly Expenses" 
+                        value={stats.monthlyExpense} 
+                        icon={<ArrowDownLeft />}
+                        type="negative"
+                        currency={currencySymbol}
+                    />
+                    <StatCard 
+                        title="Savings Rate" 
+                        value={`${stats.savingsRate}%`} 
+                        icon={<CreditCard />}
+                        type={stats.savingsRate > 20 ? 'positive' : stats.savingsRate > 0 ? 'neutral' : 'negative'}
+                    />
+                </motion.div>
 
-                    {/* Charts Row */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        {loading ? (
-                            <>
-                                <div className="lg:col-span-2"><ChartSkeleton /></div>
-                                <ChartSkeleton />
-                            </>
-                        ) : (
-                            <>
-                                {/* Monthly Trend Bar Chart (Custom CSS) */}
-                                <div className="lg:col-span-2 p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                                    <div className="flex items-center gap-2 mb-6">
-                                        <TrendingUp className="w-5 h-5 text-emerald-500" />
-                                        <h3 className="text-lg font-bold text-slate-800 dark:text-white">6-Month Trend</h3>
-                                    </div>
-                                    <TrendChart data={charts.trendData} currency={currencySymbol} />
-                                    
-                                    <div className="mt-8 flex justify-center gap-6 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-3 h-3 rounded-full bg-emerald-500" /> Income
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-3 h-3 rounded-full bg-rose-500" /> Expenses
-                                        </div>
-                                    </div>
+                {/* Charts Row */}
+                <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Monthly Trend Bar Chart */}
+                    <div className="lg:col-span-2 p-8 bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700 relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px] -mr-32 -mt-32" />
+                        
+                        <div className="flex items-center justify-between mb-8 relative">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-emerald-500/10 rounded-xl">
+                                    <TrendingUp className="w-5 h-5 text-emerald-500" />
                                 </div>
-
-                                {/* Category Distribution Chart (Custom CSS) */}
-                                <div className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                                    <div className="flex items-center gap-2 mb-6">
-                                        <TrendingUp className="w-5 h-5 text-emerald-500" />
-                                        <h3 className="text-lg font-bold text-slate-800 dark:text-white">Distribution</h3>
-                                    </div>
-                                    <DistributionChart data={charts.categoryData} currency={currencySymbol} />
-                                </div>
-                            </>
-                        )}
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        {/* Recent Transactions */}
-                        {loading ? (
-                            <div className="lg:col-span-2">
-                                <TableSkeleton />
+                                <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Spending Analysis</h3>
                             </div>
-                        ) : (
-                            <div className="lg:col-span-2 p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-4 text-emerald-500">Recent Transactions</h3>
-                                <div className="overflow-x-auto">
-                                    <table className="w-full text-sm text-left">
-                                        <thead className="text-xs text-slate-500 uppercase bg-slate-50 dark:bg-slate-900/50 dark:text-slate-400">
-                                            <tr>
-                                                <th className="px-4 py-3">Date</th>
-                                                <th className="px-4 py-3">Description</th>
-                                                <th className="px-4 py-3">Category</th>
-                                                <th className="px-4 py-3 text-right">Amount</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                                            {recentTransactions.map((tx) => (
-                                                <tr key={tx.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
-                                                    <td className="px-4 py-3 text-slate-600 dark:text-slate-400">
-                                                        {new Date(tx.date).toLocaleDateString()}
-                                                    </td>
-                                                    <td className="px-4 py-3 font-medium text-slate-800 dark:text-slate-200">
-                                                        {tx.description || 'No description'}
-                                                    </td>
-                                                    <td className="px-4 py-3">
-                                                        <span 
-                                                            className="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider"
-                                                            style={{ backgroundColor: `${tx.category.color}20`, color: tx.category.color }}
-                                                        >
-                                                            {tx.category.name}
-                                                        </span>
-                                                    </td>
-                                                    <td className={`px-4 py-3 text-right font-bold ${tx.category.type === 'income' ? 'text-emerald-500' : 'text-rose-500'}`}>
-                                                        {tx.category.type === 'income' ? '+' : '-'}{currencySymbol}{parseFloat(tx.amount).toLocaleString()}
-                                                    </td>
-                                                </tr>
-                                            ))}
-                                            {recentTransactions.length === 0 && (
-                                                <tr>
-                                                    <td colSpan="4" className="px-4 py-8 text-center text-slate-500">No recent transactions</td>
-                                                </tr>
-                                            )}
-                                        </tbody>
-                                    </table>
+                            <div className="flex gap-4 text-[10px] font-black uppercase tracking-widest text-slate-400">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500" /> Income
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <div className="w-2.5 h-2.5 rounded-full bg-rose-500" /> Expenses
                                 </div>
                             </div>
-                        )}
+                        </div>
+                        <TrendChart data={charts.trendData} currency={currencySymbol} />
+                    </div>
 
-                        {/* Budget Status */}
-                        {loading ? (
-                            <TableSkeleton />
-                        ) : (
-                            <div className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                                <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-6">Budget Tracking</h3>
-                                <div className="space-y-6">
-                                    {budgets.map((budget, index) => (
-                                        <BudgetProgress 
-                                            key={index}
-                                            category={budget.category}
-                                            spent={parseFloat(budget.spent)}
-                                            limit={parseFloat(budget.limit)}
-                                            percentage={budget.percentage}
-                                        />
+                    {/* Category Distribution Chart */}
+                    <div className="p-8 bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700 relative overflow-hidden">
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="p-2 bg-emerald-500/10 rounded-xl">
+                                <TrendingUp className="w-5 h-5 text-emerald-500" />
+                            </div>
+                            <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Distribution</h3>
+                        </div>
+                        <DistributionChart data={charts.categoryData} currency={currencySymbol} />
+                    </div>
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Recent Transactions */}
+                    <div className="lg:col-span-2 p-8 bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700">
+                        <div className="flex items-center justify-between mb-8">
+                            <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight">Recent Activity</h3>
+                            <button className="text-[10px] font-black text-emerald-500 uppercase tracking-widest hover:underline">View All Activity</button>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-sm text-left">
+                                <thead className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                                    <tr>
+                                        <th className="px-4 py-4">Date</th>
+                                        <th className="px-4 py-4">Description</th>
+                                        <th className="px-4 py-4">Category</th>
+                                        <th className="px-4 py-4 text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-slate-50 dark:divide-slate-700/50">
+                                    {recentTransactions.map((tx, idx) => (
+                                        <motion.tr 
+                                            key={tx.id} 
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="group hover:bg-slate-50/50 dark:hover:bg-slate-700/20 transition-all duration-300"
+                                        >
+                                            <td className="px-4 py-5 text-slate-500 dark:text-slate-400 font-medium">
+                                                {new Date(tx.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                                            </td>
+                                            <td className="px-4 py-5">
+                                                <div className="font-bold text-slate-800 dark:text-slate-200 group-hover:text-emerald-500 transition-colors">
+                                                    {tx.description || 'General Transaction'}
+                                                </div>
+                                            </td>
+                                            <td className="px-4 py-5">
+                                                <span 
+                                                    className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider"
+                                                    style={{ backgroundColor: `${tx.category.color}15`, color: tx.category.color }}
+                                                >
+                                                    {tx.category.name}
+                                                </span>
+                                            </td>
+                                            <td className={`px-4 py-5 text-right font-black tracking-tight ${tx.category.type === 'income' ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                                {tx.category.type === 'income' ? '+' : '-'}{currencySymbol}{parseFloat(tx.amount).toLocaleString()}
+                                            </td>
+                                        </motion.tr>
                                     ))}
-                                    {budgets.length === 0 && (
-                                        <p className="text-center py-8 text-slate-500 italic">No budgets set for this month.</p>
+                                    {recentTransactions.length === 0 && (
+                                        <tr>
+                                            <td colSpan="4" className="px-4 py-12 text-center text-slate-400 italic font-medium">No activity recorded for this period</td>
+                                        </tr>
                                     )}
-                                </div>
-                            </div>
-                        )}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
-            </div>
+
+                    {/* Budget Status */}
+                    <div className="p-8 bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700">
+                        <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight mb-8">Monthly Budgets</h3>
+                        <div className="space-y-8">
+                            {budgets.map((budget, index) => (
+                                <motion.div 
+                                    key={index}
+                                    initial={{ opacity: 0, x: 10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ delay: index * 0.1 }}
+                                >
+                                    <BudgetProgress 
+                                        category={budget.category}
+                                        spent={parseFloat(budget.spent)}
+                                        limit={parseFloat(budget.limit)}
+                                        percentage={budget.percentage}
+                                        currency={currencySymbol}
+                                    />
+                                </motion.div>
+                            ))}
+                            {budgets.length === 0 && (
+                                <div className="text-center py-12 px-6 rounded-3xl bg-slate-50 dark:bg-slate-900/50 border border-dashed border-slate-200 dark:border-slate-700">
+                                    <p className="text-sm text-slate-400 font-medium italic">No active budgets found.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </motion.div>
+            </motion.div>
         </AuthenticatedLayout>
     );
 }

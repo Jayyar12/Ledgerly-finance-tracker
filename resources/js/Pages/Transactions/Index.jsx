@@ -9,6 +9,7 @@ import SecondaryButton from '@/Components/SecondaryButton';
 import ConfirmationModal from '@/Components/ConfirmationModal';
 import SearchableSelect from '@/Components/SearchableSelect';
 import { Plus, Filter, Trash2, Edit2, Search } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 function usePrevious(value) {
     const ref = useRef();
@@ -158,7 +159,7 @@ export default function Index({ auth, transactions, categories, filters }) {
                     <div className="bg-white dark:bg-slate-800 overflow-hidden shadow-sm sm:rounded-2xl border border-slate-100 dark:border-slate-700">
                         <div className="p-6">
                             {/* Table */}
-                            <div className="overflow-x-auto">
+                            <div className="overflow-x-auto min-h-[600px]">
                                 <table className="w-full text-sm text-left">
                                     <thead className="text-xs text-slate-500 uppercase bg-slate-50 dark:bg-slate-900/50 dark:text-slate-400">
                                         <tr>
@@ -169,52 +170,61 @@ export default function Index({ auth, transactions, categories, filters }) {
                                             <th className="px-6 py-4 text-center">Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                                        {transactions.data.map((tx) => (
-                                            <tr key={tx.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
-                                                <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
-                                                    {new Date(tx.date).toLocaleDateString()}
-                                                </td>
-                                                <td className="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">
-                                                    {tx.description || <span className="italic opacity-50">No description</span>}
-                                                </td>
-                                                <td className="px-6 py-4">
-                                                    <span 
-                                                        className="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider"
-                                                        style={{ backgroundColor: `${tx.category.color}20`, color: tx.category.color }}
-                                                    >
-                                                        {tx.category.name}
-                                                    </span>
-                                                </td>
-                                                <td className={`px-6 py-4 text-right font-bold ${tx.category.type === 'income' ? 'text-emerald-500' : 'text-rose-500'}`}>
-                                                    {tx.category.type === 'income' ? '+' : '-'}{auth.user.currency === 'PHP' ? '₱' : '$'}{parseFloat(tx.amount).toLocaleString()}
-                                                </td>
-                                                <td className="px-6 py-4 text-center">
-                                                    <div className="flex justify-center gap-2">
-                                                        <button 
-                                                            onClick={() => openEditModal(tx)}
-                                                            className="p-1 text-slate-400 hover:text-emerald-500 transition-colors"
+                                    <AnimatePresence mode="wait">
+                                        <motion.tbody 
+                                            key={transactions.current_page}
+                                            initial={{ opacity: 0, y: 10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="divide-y divide-slate-100 dark:divide-slate-700"
+                                        >
+                                            {transactions.data.map((tx) => (
+                                                <tr key={tx.id} className="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+                                                    <td className="px-6 py-4 text-slate-600 dark:text-slate-400">
+                                                        {new Date(tx.date).toLocaleDateString()}
+                                                    </td>
+                                                    <td className="px-6 py-4 font-medium text-slate-800 dark:text-slate-200">
+                                                        {tx.description || <span className="italic opacity-50">No description</span>}
+                                                    </td>
+                                                    <td className="px-6 py-4">
+                                                        <span 
+                                                            className="px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider"
+                                                            style={{ backgroundColor: `${tx.category.color}20`, color: tx.category.color }}
                                                         >
-                                                            <Edit2 className="w-4 h-4" />
-                                                        </button>
-                                                        <button 
-                                                            onClick={() => confirmDeletion(tx)}
-                                                            className="p-1 text-slate-400 hover:text-rose-500 transition-colors"
-                                                        >
-                                                            <Trash2 className="w-4 h-4" />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                        {transactions.data.length === 0 && (
-                                            <tr>
-                                                <td colSpan="5" className="px-6 py-12 text-center text-slate-500">
-                                                    No transactions found.
-                                                </td>
-                                            </tr>
-                                        )}
-                                    </tbody>
+                                                            {tx.category.name}
+                                                        </span>
+                                                    </td>
+                                                    <td className={`px-6 py-4 text-right font-bold ${tx.category.type === 'income' ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                                        {tx.category.type === 'income' ? '+' : '-'}{auth.user.currency === 'PHP' ? '₱' : '$'}{parseFloat(tx.amount).toLocaleString()}
+                                                    </td>
+                                                    <td className="px-6 py-4 text-center">
+                                                        <div className="flex justify-center gap-2">
+                                                            <button 
+                                                                onClick={() => openEditModal(tx)}
+                                                                className="p-1 text-slate-400 hover:text-emerald-500 transition-colors"
+                                                            >
+                                                                <Edit2 className="w-4 h-4" />
+                                                            </button>
+                                                            <button 
+                                                                onClick={() => confirmDeletion(tx)}
+                                                                className="p-1 text-slate-400 hover:text-rose-500 transition-colors"
+                                                            >
+                                                                <Trash2 className="w-4 h-4" />
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                            {transactions.data.length === 0 && (
+                                                <tr>
+                                                    <td colSpan="5" className="px-6 py-12 text-center text-slate-500">
+                                                        No transactions found.
+                                                    </td>
+                                                </tr>
+                                            )}
+                                        </motion.tbody>
+                                    </AnimatePresence>
                                 </table>
                             </div>
 
