@@ -1,10 +1,6 @@
-# Ledgerly: Personal Finance Tracker
-
-**Ledgerly** is a high-performance, modern financial management application built with **Laravel 12**, **Inertia.js v2**, and **React**. It features a "FinTech" aesthetic with a focus on speed, security, and intuitive user experience.
-
 ![Ledgerly Dashboard Screenshot](public/images/finance-report.png)
 
-## 🚀 Key Features
+## Key Features
 
 - **Dynamic Dashboard**: Real-time balance calculations, monthly income vs. expense tracking, and savings rate analysis.
 - **Interactive Analytics**: Visual distribution of expenses and 6-month financial trends using custom-engineered responsive charts.
@@ -18,16 +14,15 @@
     - **Motion Design**: Smooth pagination transitions and layout stability fixes (scrollbar-gutter).
     - **Dark Mode Support**: Optimized for both light and dark viewing environments.
 
-## 🛠️ Technical Stack
+## Technical Stack
 
-- **Backend**: Laravel 12.x (PHP 8.2)
-- **Frontend**: React + Tailwind CSS
-- **Bridge**: Inertia.js v2 (SPA architecture)
-- **Authentication**: Laravel Sanctum (SPA Mode)
-- **Database**: MySQL 8.0
-- **State Management**: Server-driven state with Inertia hooks
+| Layer | Technology | Version | Purpose |
+|-------|-----------|---------|---------|
+| **Runtime** | PHP | 8.2 | Server-side execution |
+| **Framework** | Laravel | 12.x | Backend logic and routing |
+| **Frontend Bridge** | Inertia.js | v2 | SPA-like experience with server-side routing |
 
-## 📦 Installation
+## Installation
 
 1. **Clone the repository**:
    ```bash
@@ -59,7 +54,7 @@
    npm run dev
    ```
 
-## 📂 Project Structure
+## Project Structure
 
 - `app/Http/Controllers`: Backend logic handling dashboard data, transactions, and user profiles.
 - `app/Models`: Relational database models (User, Category, Transaction, Budget).
@@ -67,7 +62,7 @@
 - `resources/js/Components/Skeletons`: Reusable loading state components.
 - `database/migrations`: Normalized database schema with foreign key constraints and indexes.
 
-## 🛡️ Security & Performance
+## Security & Performance
 
 - **Authorization**: Granular access control using Laravel Policies (Users can only access their own data).
 - **Validation**: Strict input sanitization via Laravel Form Requests.
