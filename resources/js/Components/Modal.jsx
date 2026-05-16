@@ -45,15 +45,16 @@ export default function Modal({
 
                     {/* Modal Content */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        initial={{ opacity: 0, scale: 0.98, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        exit={{ opacity: 0, scale: 0.98, y: 10 }}
                         transition={{ 
                             type: 'spring',
-                            damping: 25,
-                            stiffness: 300
+                            damping: 30,
+                            stiffness: 500,
+                            mass: 0.8
                         }}
-                        className={`relative z-10 mb-6 w-full transform overflow-hidden rounded-[2rem] bg-white dark:bg-slate-800 shadow-2xl border border-slate-100 dark:border-slate-700 sm:mx-auto ${maxWidthClass}`}
+                        className={`relative z-10 mb-6 w-full transform overflow-hidden rounded-[2rem] bg-white dark:bg-slate-800 shadow-2xl border border-slate-100 dark:border-slate-700 sm:mx-auto will-change-transform will-change-opacity ${maxWidthClass}`}
                     >
                         <DialogPanel>
                             {children}

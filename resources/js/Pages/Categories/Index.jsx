@@ -107,7 +107,12 @@ export default function Index({ categories }) {
                             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 min-h-[400px]"
                         >
                             {categories.data.map((cat) => (
-                                <div key={cat.id} className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:shadow-md transition-shadow">
+                                <motion.div 
+                                    key={cat.id} 
+                                    whileHover={{ y: -5 }}
+                                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                                    className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:border-emerald-500/50 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none transition-all duration-300 group cursor-default will-change-transform"
+                                >
                                     <div className="flex justify-between items-start mb-4">
                                         <div 
                                             className="p-3 rounded-xl"
@@ -128,7 +133,7 @@ export default function Index({ categories }) {
                                     <p className="text-xs font-medium text-slate-500 uppercase tracking-widest mt-1">
                                         {cat.type}
                                     </p>
-                                </div>
+                                </motion.div>
                             ))}
                             {categories.data.length === 0 && (
                                 <div className="col-span-full py-12 text-center bg-white dark:bg-slate-800 rounded-2xl border border-dashed border-slate-300 dark:border-slate-700">

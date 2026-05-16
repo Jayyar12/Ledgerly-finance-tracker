@@ -5,10 +5,10 @@ export default function BudgetProgress({ category, spent, limit, percentage, cur
     const barColor = isOver ? 'bg-rose-500' : percentage > 80 ? 'bg-amber-500' : 'bg-emerald-500';
 
     return (
-        <div className="space-y-3 group">
+        <div className="space-y-3 group transition-transform duration-300">
             <div className="flex justify-between items-end">
                 <div>
-                    <h4 className="font-bold text-slate-800 dark:text-slate-100 group-hover:text-emerald-500 transition-colors">{category}</h4>
+                    <h4 className="font-bold text-slate-800 dark:text-slate-100 group-hover:text-emerald-500 transition-colors duration-300">{category}</h4>
                     <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">
                         {currency}{spent.toLocaleString()} <span className="text-slate-300 dark:text-slate-600">/</span> {currency}{limit.toLocaleString()}
                     </p>

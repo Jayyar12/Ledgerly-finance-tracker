@@ -26,5 +26,10 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\RateLimiter::for('finance-ops', function (\Illuminate\Http\Request $request) {
             return \Illuminate\Cache\RateLimiting\Limit::perMinute(30)->by($request->user()?->id ?: $request->ip());
         });
+
+        // Register Model Observers for Cache Invalidation
+        \App\Models\Transaction::observe(\App\Observers\TransactionObserver::class);
+        \App\Models\Budget::observe(\App\Observers\BudgetObserver::class);
+        \App\Models\Category::observe(\App\Observers\CategoryObserver::class);
     }
 }

@@ -5,13 +5,13 @@ import StatCard from '@/Components/StatCard';
 import BudgetProgress from '@/Components/BudgetProgress';
 import { TrendChart, DistributionChart } from '@/Components/DashboardCharts';
 import { motion } from 'framer-motion';
-import { 
-    Wallet, 
-    ArrowUpRight, 
-    ArrowDownLeft, 
-    CreditCard, 
-    TrendingUp, 
-    Download 
+import {
+    Wallet,
+    ArrowUpRight,
+    ArrowDownLeft,
+    CreditCard,
+    TrendingUp,
+    Download
 } from 'lucide-react';
 
 export default function Dashboard({ stats, recentTransactions, budgets, charts }) {
@@ -39,8 +39,8 @@ export default function Dashboard({ stats, recentTransactions, budgets, charts }
 
     const itemVariants = {
         hidden: { opacity: 0, y: 20 },
-        visible: { 
-            opacity: 1, 
+        visible: {
+            opacity: 1,
             y: 0,
             transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
         }
@@ -51,7 +51,7 @@ export default function Dashboard({ stats, recentTransactions, budgets, charts }
             <Head title="Dashboard" />
 
             {/* Header / Welcome Section */}
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.7 }}
@@ -66,19 +66,19 @@ export default function Dashboard({ stats, recentTransactions, budgets, charts }
                         Here's what's happening with your finances today.
                     </p>
                 </div>
-                
+
                 <div className="flex flex-wrap items-center gap-3 bg-white/50 dark:bg-slate-800/50 backdrop-blur-md p-2 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
                     <div className="flex items-center gap-2 px-4 border-r border-slate-200 dark:border-slate-700">
                         <span className="text-[10px] uppercase font-black text-slate-400 tracking-widest">Report Month</span>
-                        <input 
-                            type="month" 
+                        <input
+                            type="month"
                             className="border-none bg-transparent text-sm font-black text-slate-700 dark:text-slate-200 focus:ring-0 p-0 cursor-pointer"
                             value={reportMonth}
                             onChange={(e) => setReportMonth(e.target.value)}
                         />
                     </div>
-                    <a 
-                        href={route('reports.export', { month: reportMonth })} 
+                    <a
+                        href={route('reports.export', { month: reportMonth })}
                         className="inline-flex items-center px-6 py-3 bg-slate-900 dark:bg-emerald-500 border border-transparent rounded-2xl font-black text-[10px] text-white uppercase tracking-[0.2em] hover:scale-105 active:scale-95 shadow-xl shadow-slate-500/20 dark:shadow-emerald-500/20 transition-all duration-300 gap-2"
                     >
                         <Download className="w-4 h-4" /> Export Data
@@ -86,7 +86,7 @@ export default function Dashboard({ stats, recentTransactions, budgets, charts }
                 </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
@@ -94,33 +94,57 @@ export default function Dashboard({ stats, recentTransactions, budgets, charts }
             >
                 {/* Top Stats Grid */}
                 <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <StatCard 
-                        title="Total Balance" 
-                        value={stats.balance} 
-                        icon={<Wallet />}
-                        type="neutral"
-                        currency={currencySymbol}
-                    />
-                    <StatCard 
-                        title="Monthly Income" 
-                        value={stats.monthlyIncome} 
-                        icon={<ArrowUpRight />}
-                        type="positive"
-                        currency={currencySymbol}
-                    />
-                    <StatCard 
-                        title="Monthly Expenses" 
-                        value={stats.monthlyExpense} 
-                        icon={<ArrowDownLeft />}
-                        type="negative"
-                        currency={currencySymbol}
-                    />
-                    <StatCard 
-                        title="Savings Rate" 
-                        value={`${stats.savingsRate}%`} 
-                        icon={<CreditCard />}
-                        type={stats.savingsRate > 20 ? 'positive' : stats.savingsRate > 0 ? 'neutral' : 'negative'}
-                    />
+                    <motion.div
+                        whileHover={{ y: -4, scale: 1.01 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        className="will-change-transform"
+                    >
+                        <StatCard
+                            title="Total Balance"
+                            value={stats.balance}
+                            icon={<Wallet />}
+                            type="neutral"
+                            currency={currencySymbol}
+                        />
+                    </motion.div>
+                    <motion.div
+                        whileHover={{ y: -4, scale: 1.01 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        className="will-change-transform"
+                    >
+                        <StatCard
+                            title="Monthly Income"
+                            value={stats.monthlyIncome}
+                            icon={<ArrowUpRight />}
+                            type="positive"
+                            currency={currencySymbol}
+                        />
+                    </motion.div>
+                    <motion.div
+                        whileHover={{ y: -4, scale: 1.01 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        className="will-change-transform"
+                    >
+                        <StatCard
+                            title="Monthly Expenses"
+                            value={stats.monthlyExpense}
+                            icon={<ArrowDownLeft />}
+                            type="negative"
+                            currency={currencySymbol}
+                        />
+                    </motion.div>
+                    <motion.div
+                        whileHover={{ y: -4, scale: 1.01 }}
+                        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                        className="will-change-transform"
+                    >
+                        <StatCard
+                            title="Savings Rate"
+                            value={`${stats.savingsRate}%`}
+                            icon={<CreditCard />}
+                            type={stats.savingsRate > 20 ? 'positive' : stats.savingsRate > 0 ? 'neutral' : 'negative'}
+                        />
+                    </motion.div>
                 </motion.div>
 
                 {/* Charts Row */}
@@ -128,7 +152,7 @@ export default function Dashboard({ stats, recentTransactions, budgets, charts }
                     {/* Monthly Trend Bar Chart */}
                     <div className="lg:col-span-2 p-8 bg-white dark:bg-slate-800 rounded-[2.5rem] shadow-sm border border-slate-100 dark:border-slate-700 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-[100px] -mr-32 -mt-32" />
-                        
+
                         <div className="flex items-center justify-between mb-8 relative">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-emerald-500/10 rounded-xl">
@@ -179,8 +203,8 @@ export default function Dashboard({ stats, recentTransactions, budgets, charts }
                                 </thead>
                                 <tbody className="divide-y divide-slate-50 dark:divide-slate-700/50">
                                     {recentTransactions.map((tx, idx) => (
-                                        <motion.tr 
-                                            key={tx.id} 
+                                        <motion.tr
+                                            key={tx.id}
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 1 }}
                                             transition={{ duration: 0.2 }}
@@ -195,15 +219,19 @@ export default function Dashboard({ stats, recentTransactions, budgets, charts }
                                                 </div>
                                             </td>
                                             <td className="px-4 py-5">
-                                                <span 
-                                                    className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider"
-                                                    style={{ backgroundColor: `${tx.category.color}15`, color: tx.category.color }}
-                                                >
-                                                    {tx.category.name}
-                                                </span>
+                                                {tx.category ? (
+                                                    <span
+                                                        className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider"
+                                                        style={{ backgroundColor: `${tx.category.color}15`, color: tx.category.color }}
+                                                    >
+                                                        {tx.category.name}
+                                                    </span>
+                                                ) : (
+                                                    <span className="text-[10px] text-slate-400 italic">Uncategorized</span>
+                                                )}
                                             </td>
-                                            <td className={`px-4 py-5 text-right font-black tracking-tight ${tx.category.type === 'income' ? 'text-emerald-500' : 'text-rose-500'}`}>
-                                                {tx.category.type === 'income' ? '+' : '-'}{currencySymbol}{parseFloat(tx.amount).toLocaleString()}
+                                            <td className={`px-4 py-5 text-right font-black tracking-tight ${tx.category?.type === 'income' ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                                {tx.category?.type === 'income' ? '+' : '-'}{currencySymbol}{parseFloat(tx.amount).toLocaleString()}
                                             </td>
                                         </motion.tr>
                                     ))}
@@ -222,13 +250,20 @@ export default function Dashboard({ stats, recentTransactions, budgets, charts }
                         <h3 className="text-xl font-black text-slate-800 dark:text-white tracking-tight mb-8">Monthly Budgets</h3>
                         <div className="space-y-8">
                             {budgets.map((budget, index) => (
-                                <motion.div 
+                                <motion.div
                                     key={index}
                                     initial={{ opacity: 0, x: 10 }}
                                     animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: index * 0.1 }}
+                                    whileHover={{ x: 4 }}
+                                    transition={{
+                                        delay: index * 0.05,
+                                        type: "spring",
+                                        stiffness: 300,
+                                        damping: 25
+                                    }}
+                                    className="cursor-pointer will-change-transform"
                                 >
-                                    <BudgetProgress 
+                                    <BudgetProgress
                                         category={budget.category}
                                         spent={parseFloat(budget.spent)}
                                         limit={parseFloat(budget.limit)}

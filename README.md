@@ -7,11 +7,12 @@
 - **Global Currency Support**: Seamlessly switch between **USD ($)** and **PHP (₱)** with persistent user preferences.
 - **Budget Tracking**: Set category-specific budgets and monitor burn rates with visual progress indicators.
 - **Transaction Ledger**: Advanced filtering, search, and pagination for full control over your financial history.
+- **Performance Caching**: Application-level caching for complex financial aggregations, reducing database load and improving perceived speed.
 - **Modern UI/UX**:
     - **Soft UI Aesthetic**: A clean, premium emerald-and-slate theme.
     - **Account Onboarding**: Mandatory 3-step setup (Currency, Balance, Categories) for a seamless first-time experience.
-    - **Loading Skeletons**: Professional placeholder states for improved perceived performance.
-    - **Motion Design**: Smooth pagination transitions and layout stability fixes (scrollbar-gutter).
+    - **Interactive Hover States**: Premium, spring-based hover effects on cards and budgets for a reactive feel.
+    - **Optimized Motion**: Butter-smooth modal transitions and hardware-accelerated (GPU) animations using Framer Motion.
     - **Dark Mode Support**: Optimized for both light and dark viewing environments.
 
 ## 2. Technical Stack
@@ -65,14 +66,17 @@
 - `app/Http/Controllers`: Backend logic handling dashboard data, transactions, and user profiles.
 - `app/Models`: Relational database models (User, Category, Transaction, Budget).
 - `resources/js/Pages`: React components for Dashboard, Ledger, and Settings.
-- `resources/js/Components/Skeletons`: Reusable loading state components.
 - `database/migrations`: Normalized database schema with foreign key constraints and indexes.
 
 ## Security & Performance
 
 - **Authorization**: Granular access control using Laravel Policies (Users can only access their own data).
 - **Validation**: Strict input sanitization via Laravel Form Requests.
-- **Performance**: Eager loading of relationships to prevent N+1 query issues and optimized Vite/Rolldown builds.
+- **Performance**:
+    - **Application Caching**: Dashboard statistics are cached for 60 minutes using user-specific keys.
+    - **Automated Invalidation**: Uses Eloquent Observers (`TransactionObserver`, `BudgetObserver`, `CategoryObserver`) to instantly clear stale cache when data is modified.
+    - **Eager Loading**: Prevents N+1 query issues across all relationships.
+    - **Asset Optimization**: Optimized Vite/Rolldown builds for fast frontend delivery.
 
 ---
 Built with ❤️ by [Jay Guiroy](https://github.com/jay-guiroy)

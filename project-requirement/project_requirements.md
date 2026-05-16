@@ -159,10 +159,6 @@ Sets spending limits for categories.
 ### 5.3 Micro-interactions
 - Hover states on buttons and list items.
 - Smooth transitions between Inertia pages.
-- **Loading Skeletons**: 
-    - `StatCardSkeleton`: Pulsing cards for summary stats.
-    - `ChartSkeleton`: Structural outlines for analytics charts.
-    - `TableSkeleton`: Placeholder rows for transaction and budget tables.
 - **Smooth Motion Design**: 
     - **Pagination Transitions**: `AnimatePresence` used to provide fade/slide effects when switching pages.
     - **Layout Stability**: `scrollbar-gutter: stable` and `overflow-y: scroll` enforced to prevent horizontal layout shifts.
