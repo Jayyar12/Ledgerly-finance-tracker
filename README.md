@@ -14,13 +14,19 @@
     - **Motion Design**: Smooth pagination transitions and layout stability fixes (scrollbar-gutter).
     - **Dark Mode Support**: Optimized for both light and dark viewing environments.
 
-## Technical Stack
+## 2. Technical Stack
 
 | Layer | Technology | Version | Purpose |
 |-------|-----------|---------|---------|
 | **Runtime** | PHP | 8.2 | Server-side execution |
 | **Framework** | Laravel | 12.x | Backend logic and routing |
 | **Frontend Bridge** | Inertia.js | v2 | SPA-like experience with server-side routing |
+| **UI Framework** | React + Tailwind CSS | Latest | Modern, responsive interface |
+| **Database** | MySQL | 8.0 | Relational data storage (Name: `finance_tracker`) |
+| **Auth** | Laravel Sanctum | SPA Mode | Session-based secure authentication |
+| **Authorization** | Gates & Policies | Laravel Native | Fine-grained access control |
+| **PDF Engine** | DomPDF | Latest | Financial report generation |
+| **Queue** | Redis/Database | Laravel Queues | Background processing for reports |
 
 ## Installation
 
