@@ -24,8 +24,8 @@ COPY --from=node-builder /app/public/build ./public/build
 # Run production composer autoloader optimization (as root)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Ensure all files are owned by the unprivileged web user (webuser:webgroup / 9999:9999)
-RUN chown -R webuser:webgroup /var/www/html
+# Ensure all files are owned by the unprivileged web user (9999:9999)
+RUN chown -R 9999:9999 /var/www/html
 
 # Switch back to the unprivileged application user for strict production security
 USER 9999
