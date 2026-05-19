@@ -26,3 +26,8 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Ensure all files are owned by the unprivileged web user (9999:9999)
 RUN chown -R 9999:9999 /var/www/html
+
+# Create an entrypoint boot script to automatically fix storage folder permissions at startup
+RUN mkdir -p /etc/entrypoint.d \
+    && echo 'chown -R 9999:9999 /var/www/html/storage /var/www/html/bootstrap/cache' > /etc/entrypoint.d/99-fix-permissions.sh \
+    && chmod +x /etc/entrypoint.d/99-fix-permissions.sh
