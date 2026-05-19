@@ -104,33 +104,33 @@ export default function Index({ categories }) {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
                             transition={{ duration: 0.3 }}
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 min-h-[400px]"
+                            className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 min-h-[400px]"
                         >
                             {categories.data.map((cat) => (
                                 <motion.div 
                                     key={cat.id} 
                                     whileHover={{ y: -5 }}
                                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                                    className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:border-emerald-500/50 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none transition-all duration-300 group cursor-default will-change-transform"
+                                    className="p-4 sm:p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:border-emerald-500/50 hover:shadow-xl hover:shadow-slate-200/50 dark:hover:shadow-none transition-all duration-300 group cursor-default will-change-transform"
                                 >
-                                    <div className="flex justify-between items-start mb-4">
+                                    <div className="flex justify-between items-start mb-3 sm:mb-4">
                                         <div 
-                                            className="p-3 rounded-xl"
+                                            className="p-2 sm:p-3 rounded-xl flex-shrink-0"
                                             style={{ backgroundColor: `${cat.color}20`, color: cat.color }}
                                         >
-                                            <Tag className="w-5 h-5" />
+                                            <Tag className="w-4 h-4 sm:w-5 sm:h-5" />
                                         </div>
-                                        <div className="flex gap-2">
-                                            <button onClick={() => openEditModal(cat)} className="text-slate-400 hover:text-emerald-500 transition-colors">
-                                                <Edit2 className="w-4 h-4" />
+                                        <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
+                                            <button onClick={() => openEditModal(cat)} className="text-slate-400 hover:text-emerald-500 transition-colors p-1">
+                                                <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                             </button>
-                                            <button onClick={() => confirmDeletion(cat)} className="text-slate-400 hover:text-rose-500 transition-colors">
-                                                <Trash2 className="w-4 h-4" />
+                                            <button onClick={() => confirmDeletion(cat)} className="text-slate-400 hover:text-rose-500 transition-colors p-1">
+                                                <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                             </button>
                                         </div>
                                     </div>
-                                    <h3 className="text-lg font-bold text-slate-800 dark:text-white">{cat.name}</h3>
-                                    <p className="text-xs font-medium text-slate-500 uppercase tracking-widest mt-1">
+                                    <h3 className="text-sm sm:text-lg font-bold text-slate-800 dark:text-white truncate">{cat.name}</h3>
+                                    <p className="text-[9px] sm:text-xs font-medium text-slate-500 uppercase tracking-widest mt-0.5 sm:mt-1">
                                         {cat.type}
                                     </p>
                                 </motion.div>

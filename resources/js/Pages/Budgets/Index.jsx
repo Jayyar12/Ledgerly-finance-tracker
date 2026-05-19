@@ -87,36 +87,38 @@ export default function Index({ auth, budgets, categories }) {
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                         {budgets.data.map((budget) => (
-                            <div key={budget.id} className="p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="flex items-center gap-3">
-                                        <div 
-                                            className="p-3 rounded-xl"
-                                            style={{ backgroundColor: `${budget.category.color}20`, color: budget.category.color }}
-                                        >
-                                            <Target className="w-5 h-5" />
+                            <div key={budget.id} className="p-4 sm:p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 flex flex-col justify-between">
+                                <div>
+                                    <div className="flex flex-col sm:flex-row justify-between items-start gap-3 mb-3 sm:mb-4">
+                                        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+                                            <div 
+                                                className="p-2 sm:p-3 rounded-xl flex-shrink-0"
+                                                style={{ backgroundColor: `${budget.category.color}20`, color: budget.category.color }}
+                                            >
+                                                <Target className="w-4 h-4 sm:w-5 sm:h-5" />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <h3 className="text-sm sm:text-lg font-bold text-slate-800 dark:text-white truncate">{budget.category.name}</h3>
+                                                <p className="text-[9px] sm:text-xs text-slate-500 uppercase tracking-widest leading-none mt-0.5">{budget.period}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="text-lg font-bold text-slate-800 dark:text-white">{budget.category.name}</h3>
-                                            <p className="text-xs text-slate-500 uppercase tracking-widest">{budget.period}</p>
+                                        <div className="flex gap-1.5 sm:gap-2 flex-shrink-0">
+                                            <button onClick={() => openEditModal(budget)} className="text-slate-400 hover:text-emerald-500 transition-colors p-1">
+                                                <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                            </button>
+                                            <button onClick={() => confirmDeletion(budget)} className="text-slate-400 hover:text-rose-500 transition-colors p-1">
+                                                <Trash2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                                            </button>
                                         </div>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <button onClick={() => openEditModal(budget)} className="text-slate-400 hover:text-emerald-500 transition-colors">
-                                            <Edit2 className="w-4 h-4" />
-                                        </button>
-                                        <button onClick={() => confirmDeletion(budget)} className="text-slate-400 hover:text-rose-500 transition-colors">
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
+                                    <div className="mt-2 sm:mt-4">
+                                        <p className="text-[10px] sm:text-sm text-slate-500">Target Amount</p>
+                                        <p className="text-base sm:text-2xl font-bold text-slate-900 dark:text-white mt-0.5 sm:mt-1">{auth.user.currency === 'PHP' ? '₱' : '$'}{parseFloat(budget.amount).toLocaleString()}</p>
                                     </div>
                                 </div>
-                                <div className="mt-4">
-                                    <p className="text-sm text-slate-500">Target Amount</p>
-                                    <p className="text-2xl font-bold text-slate-900 dark:text-white">{auth.user.currency === 'PHP' ? '₱' : '$'}{parseFloat(budget.amount).toLocaleString()}</p>
-                                </div>
-                                <div className="mt-4 pt-4 border-t border-slate-50 dark:border-slate-700/50 flex justify-between text-xs text-slate-500">
+                                <div className="mt-4 pt-3 sm:pt-4 border-t border-slate-50 dark:border-slate-700/50 flex justify-between text-[9px] sm:text-xs text-slate-500">
                                     <span>Starts: {new Date(budget.start_date).toLocaleDateString()}</span>
                                 </div>
                             </div>

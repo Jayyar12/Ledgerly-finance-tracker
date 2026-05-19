@@ -8,9 +8,9 @@ export function TrendChart({ data, currency = '$' }) {
     return (
         <div className="h-[300px] w-full flex items-end justify-between gap-4 pt-10">
             {data.map((d, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center group relative h-full">
+                <div key={i} className="flex-1 flex flex-col items-center group/col relative h-full">
                     {/* Tooltip on hover */}
-                    <div className="absolute -top-16 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md text-white text-[10px] p-3 rounded-2xl opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none z-20 whitespace-nowrap shadow-2xl border border-slate-700/50 scale-95 group-hover:scale-100">
+                    <div className="absolute -top-16 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md text-white text-[10px] p-3 rounded-2xl opacity-0 group-hover/col:opacity-100 transition-all duration-300 pointer-events-none z-20 whitespace-nowrap shadow-2xl border border-slate-700/50 scale-95 group-hover/col:scale-100">
                         <div className="flex items-center gap-2 mb-1">
                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                             <span className="text-slate-400">Income:</span>
