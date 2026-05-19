@@ -1,3 +1,5 @@
+# Ledgerly - Personal Finance Tracker
+
 ![Ledgerly Dashboard Screenshot](public/images/finance-report.png)
 
 ## Key Features
@@ -15,33 +17,57 @@
     - **Optimized Motion**: Butter-smooth modal transitions and hardware-accelerated (GPU) animations using Framer Motion.
     - **Dark Mode Support**: Optimized for both light and dark viewing environments.
 
-## 2. Technical Stack
+## Technical Stack
 
 | Layer | Technology | Version | Purpose |
 |-------|-----------|---------|---------|
-| **Runtime** | PHP | 8.2 | Server-side execution |
-| **Framework** | Laravel | 12.x | Backend logic and routing |
-| **Frontend Bridge** | Inertia.js | v2 | SPA-like experience with server-side routing |
-| **UI Framework** | React + Tailwind CSS | Latest | Modern, responsive interface |
-| **Database** | MySQL | 8.0 | Relational data storage (Name: `finance_tracker`) |
-| **Auth** | Laravel Sanctum | SPA Mode | Session-based secure authentication |
-| **Authorization** | Gates & Policies | Laravel Native | Fine-grained access control |
-| **PDF Engine** | DomPDF | Latest | Financial report generation |
-| **Queue** | Redis/Database | Laravel Queues | Background processing for reports |
+| **Runtime (Backend)** | PHP | `^8.4` | Server-side execution & logic |
+| **Runtime (Frontend)** | Node.js | `^20.19.0` or `>=22.12.0` | Frontend build & asset bundling |
+| **Framework** | Laravel | `13.x` (specifically `^13.7`) | Backend MVC framework and API layer |
+| **Frontend Bridge** | Inertia.js | `v2` (specifically `^2.0`) | SPA-like experience with server-side routing |
+| **UI Framework** | React | `^18.2` | Component-based modern UI |
+| **Styling** | Tailwind CSS | `v4` (specifically `@tailwindcss/vite ^4.0.0`) | Utility-first responsive design framework |
+| **Build Tool** | Vite | `^8.0` (specifically `^8.0.13`) | Ultra-fast frontend bundler and dev server |
+| **Database** | SQLite / MySQL | SQLite (default) / MySQL `8.0+` | Relational data storage |
+| **Auth** | Laravel Sanctum | `^4.0` | Secure session-based SPA authentication |
+| **PDF Engine** | DomPDF | `^3.1` | Asynchronous financial report generation |
+| **Motion/Animations** | Framer Motion | `^12.38` | Fluid, GPU-accelerated UI interactions |
+
+## Prerequisites
+
+Before setting up and running Ledgerly, please ensure your local development environment meets the following minimum requirements:
+
+### Backend Requirements (PHP & Composer)
+* **PHP**: `^8.4` (As specified in `composer.json`)
+* **Composer**: `v2.x`
+* **Required PHP Extensions**:
+  * `openssl`, `pdo`, `mbstring`, `tokenizer`, `xml`, `ctype`, `json`
+  * `dom`, `gd` (Required for PDF template and image processing via **DomPDF**)
+* **Database**:
+  * **SQLite** (Default; standard for modern Laravel development)
+  * **MySQL** `8.0+` or **PostgreSQL** (Optional; configure credentials via `.env`)
+
+### Frontend Requirements (Node.js & NPM)
+* **Node.js**: `^20.19.0` or `>=22.12.0` (Required due to `@tailwindcss/oxide` and `@rolldown` bindings in `package-lock.json`)
+* **NPM**: `v10.x` or higher
 
 ## Installation
 
+
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/yourusername/personal-finance-tracker.git
+   git clone https://github.com/Jayyar12/personal-finance-tracker.git
    cd personal-finance-tracker
    ```
 
 2. **Install dependencies**:
    ```bash
    composer install
-   npm install
+   npm install --legacy-peer-deps
    ```
+   > [!NOTE]
+   > The `--legacy-peer-deps` flag is required during `npm install` to bypass strict peer-dependency version conflicts between cutting-edge frontend libraries (like Tailwind CSS v4, Vite 8, and React 18).
+
 
 3. **Environment Setup**:
    ```bash
