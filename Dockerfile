@@ -33,10 +33,10 @@ RUN mkdir -p \
     storage/logs \
     bootstrap/cache
 
-# Ensure all files are owned by the unprivileged web user (9999:9999)
-RUN chown -R 9999:9999 /var/www/html
+# Ensure all files are owned by the unprivileged web user (www-data:www-data)
+RUN chown -R www-data:www-data /var/www/html
 
 # Create an entrypoint boot script to automatically fix storage folder permissions at startup
 RUN mkdir -p /etc/entrypoint.d \
-    && echo 'chown -R 9999:9999 /var/www/html/storage /var/www/html/bootstrap/cache' > /etc/entrypoint.d/99-fix-permissions.sh \
+    && echo 'chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache' > /etc/entrypoint.d/99-fix-permissions.sh \
     && chmod +x /etc/entrypoint.d/99-fix-permissions.sh
