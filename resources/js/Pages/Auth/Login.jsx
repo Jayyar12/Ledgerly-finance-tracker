@@ -3,15 +3,18 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { Wallet, Lock, Mail, ArrowRight } from 'lucide-react';
 
 export default function Login({ status, canResetPassword }) {
+    const { errors: pageErrors } = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
         remember: false,
     });
+
+    const emailError = errors.email || pageErrors.email;
 
     const submit = (e) => {
         e.preventDefault();
@@ -71,7 +74,7 @@ export default function Login({ status, canResetPassword }) {
                                     placeholder="your@email.com"
                                 />
                             </div>
-                            <InputError message={errors.email} className="mt-2 ml-1" />
+                            <InputError message={emailError} className="mt-2 ml-1" />
                         </div>
 
                         <div>
@@ -124,6 +127,38 @@ export default function Login({ status, canResetPassword }) {
                             <ArrowRight className="w-5 h-5" />
                         </PrimaryButton>
                     </form>
+
+                    {/* Google OAuth Divider & Button */}
+                    <div className="mt-6 relative z-10">
+                        <div className="relative flex justify-center text-xs uppercase my-6">
+                            <span className="bg-slate-900 px-3 py-1 text-[10px] text-slate-400 font-black tracking-widest rounded-full border border-white/5">Or continue with</span>
+                        </div>
+
+                        <a
+                            href={route('auth.google')}
+                            className="w-full flex items-center justify-center gap-2.5 py-4 border border-white/10 rounded-2xl hover:bg-white/5 text-slate-200 font-bold transition-all duration-300 active:scale-[0.98] shadow-lg"
+                        >
+                            <svg className="w-5 h-5" viewBox="0 0 24 24">
+                                <path
+                                    fill="#EA4335"
+                                    d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.67 1.58 14.99 1 12 1 7.35 1 3.37 3.68 1.39 7.56l3.89 3.02C6.22 7.57 8.89 5.04 12 5.04z"
+                                />
+                                <path
+                                    fill="#4285F4"
+                                    d="M23.49 12.27c0-.81-.07-1.59-.2-2.34H12v4.44h6.44c-.28 1.47-1.11 2.71-2.36 3.55l3.66 2.84c2.14-1.97 3.75-4.88 3.75-8.49z"
+                                />
+                                <path
+                                    fill="#FBBC05"
+                                    d="M5.28 14.42c-.24-.73-.38-1.51-.38-2.32s.14-1.59.38-2.32L1.39 6.76C.5 8.54 0 10.51 0 12.5s.5 3.96 1.39 5.74l3.89-3.82z"
+                                />
+                                <path
+                                    fill="#34A853"
+                                    d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.66-2.84c-1.01.68-2.3 1.09-4.3 1.09-3.11 0-5.78-2.53-6.72-6.02L1.39 15.34C3.37 19.32 7.35 22 12 22z"
+                                />
+                            </svg>
+                            <span className="text-sm tracking-wide">Continue with Google</span>
+                        </a>
+                    </div>
                 </div>
 
                 <div className="mt-10 text-center">

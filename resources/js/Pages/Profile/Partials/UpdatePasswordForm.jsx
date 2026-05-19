@@ -6,7 +6,36 @@ import { Transition } from '@headlessui/react';
 import { useForm } from '@inertiajs/react';
 import { useRef } from 'react';
 
-export default function UpdatePasswordForm({ className = '' }) {
+export default function UpdatePasswordForm({ isGoogleUser = false, className = '' }) {
+    if (isGoogleUser) {
+        return (
+            <section className={className}>
+                <header>
+                    <h2 className="text-lg font-medium text-gray-900 dark:text-gray-100">
+                        Update Password
+                    </h2>
+                    <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                        Password controls are managed externally.
+                    </p>
+                </header>
+
+                <div className="mt-6 p-6 bg-slate-900/50 border border-white/10 rounded-2xl flex items-start gap-4">
+                    <div className="bg-emerald-500/10 p-3 rounded-xl border border-emerald-500/20 text-emerald-400 shrink-0">
+                        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h4 className="font-bold text-white text-sm">Account Linked with Google SSO</h4>
+                        <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                            Since you are signed in securely using Google OAuth, your login credentials and security settings are fully controlled via your Google Account. There is no password required or configured locally on Ledgerly.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        );
+    }
+
     const passwordInput = useRef();
     const currentPasswordInput = useRef();
 
