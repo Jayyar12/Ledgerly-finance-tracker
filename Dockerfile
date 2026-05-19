@@ -15,14 +15,17 @@ USER root
 # Configure Nginx to point directly to Laravel's public directory
 ENV NGINX_WEBROOT="/var/www/html/public"
 
-# Switch back to the unprivileged application user (9999) for strict production security
-USER 9999
+# Copy all application files (as root)
+COPY . .
 
-# Copy all application files
-COPY --chown=9999:9999 . .
+# Copy compiled frontend assets from the node-builder stage (as root)
+COPY --from=node-builder /app/public/build ./public/build
 
-# Copy compiled frontend assets from the node-builder stage
-COPY --from=node-builder --chown=9999:9999 /app/public/build ./public/build
-
-# Run production composer autoloader optimization
+# Run production composer autoloader optimization (as root)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# Ensure all files are owned by the unprivileged web user (webuser:webgroup / 9999:9999)
+RUN chown -R webuser:webgroup /var/www/html
+
+# Switch back to the unprivileged application user for strict production security
+USER 9999
