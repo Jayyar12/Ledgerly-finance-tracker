@@ -24,6 +24,15 @@ COPY --from=node-builder /app/public/build ./public/build
 # Run production composer autoloader optimization (as root)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Create essential Laravel storage and cache directories to ensure they exist in production
+RUN mkdir -p \
+    storage/app/public \
+    storage/framework/cache/data \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
+
 # Ensure all files are owned by the unprivileged web user (9999:9999)
 RUN chown -R 9999:9999 /var/www/html
 
